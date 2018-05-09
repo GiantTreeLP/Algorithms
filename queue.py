@@ -1,13 +1,9 @@
-class Queue:
-
-    def __init__(self):
-        self.queue = []
-
+class Queue(list):
     def put(self, value):
-        self.queue.append(value)
+        self.append(value)
 
     def get(self):
-        return self.queue.pop(0)
+        return self.pop(0)
 
 
 if __name__ == '__main__':
@@ -15,3 +11,4 @@ if __name__ == '__main__':
     queue.put("A")
     queue.put("B")
     print(queue.get())
+    print(queue)
