@@ -6,12 +6,12 @@ class Stack:
     Stack based on an array
     """
 
-    def __init__(self, type_code='u'):
+    def __init__(self, type_code='I'):
         """
         Creates an array of type `type_code`.
         Refer to https://docs.python.org/2/library/array.html for a list of type codes.
 
-        :param type_code: the type of the values store in the array. Defaults to unicode characters.
+        :param type_code: the type of the values store in the array. Defaults to integers.
         """
         self.backing_array = array(type_code)
 
