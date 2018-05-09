@@ -167,20 +167,4 @@ class Node:
 
 
 if __name__ == '__main__':
-    liste = List()
-
-    liste.push("Vorne")
-    print(liste)
-    print(liste.pop())
-    print(liste)
-
-    liste = List()
-
-    liste.append("1")
-    liste.append("2")
-    liste.append("3")
-
-    liste.insert(1, "Nach 1")
-    liste.remove(10)
-
-    print(liste)
+    pass
