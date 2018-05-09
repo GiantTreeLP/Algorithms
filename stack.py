@@ -1,28 +1,13 @@
 from array import array
 
 
-class Stack:
+class Stack(array):
     """
     Stack based on an array
     """
 
-    def __init__(self, type_code='I'):
-        """
-        Creates an array of type `type_code`.
-        Refer to https://docs.python.org/2/library/array.html for a list of type codes.
-
-        :param type_code: the type of the values store in the array. Defaults to integers.
-        """
-        self.backing_array = array(type_code)
-
-    def __repr__(self):
-        return repr(self.backing_array)
-
     def push(self, value):
-        self.backing_array.append(value)
-
-    def pop(self):
-        return self.backing_array.pop()
+        self.append(value)
 
 
 if __name__ == '__main__':
