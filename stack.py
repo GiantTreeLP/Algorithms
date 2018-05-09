@@ -22,13 +22,11 @@ class Stack:
         self.backing_array.append(value)
 
     def pop(self):
-        value = self.backing_array[0]
-        self.backing_array.remove(value)
-        return value
+        return self.backing_array.pop()
 
 
 if __name__ == '__main__':
-    stack = Stack()
+    stack = Stack("u")
     stack.push("A")
     stack.push("B")
     stack.push("C")
