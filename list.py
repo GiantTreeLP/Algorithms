@@ -1,4 +1,10 @@
 class List:
+    """
+    Simple singly-linked list
+
+    Exposes iterator, queue and stack functionality
+    """
+
     def __init__(self):
         self.head = Node(None)
         self.length = 0
@@ -50,10 +56,12 @@ class List:
         temp = self.head.next
         self.head.next = Node(value)
         self.head.next.next = temp
+        self.length += 1
 
     def pop(self):
         node = self.head.next
         self.head.next = self.head.next.next
+        self.length -= 1
         return node.value
 
     def __getitem__(self, index):
@@ -63,6 +71,12 @@ class List:
         return node.value
 
     def get_node(self, index):
+        """
+        Traverses the list and returns the node at the given index.
+
+        :param index: 0-based index
+        :return: Node at index
+        """
         node = self.head.next
         for i in range(index):
             node = node.next
