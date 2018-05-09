@@ -1,10 +1,16 @@
-from math import sqrt
+import math
 
 
 def sieve(n):
+    """
+    Determines the prime numbers between 0 and n using the sieve of eratosthenes with a size of n.
+
+    :param n: size of the sieve
+    :return: the prime numbers between 0 and n
+    """
     b = [True] * n
     b[1] = False
-    for i in range(1, round(sqrt(n))):
+    for i in range(1, round(math.sqrt(n))):
         if b[i]:
             for j in range(i * i, n, i):
                 b[j] = False

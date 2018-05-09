@@ -11,37 +11,74 @@ class List:
         self.tail = self.head
 
     def __len__(self):
+        """
+        Returns the length of this list without iterating over it.
+
+        :return: the length of this list
+        """
         return self.length
 
     def __iter__(self):
+        """
+        An iterator over all the nodes that make up this list.
+        Yields the nodes' values.
+
+        :return: an iterator yielding node values
+        """
         node = self.head
         while node.next is not None:
             node = node.next
-            yield node
+            yield node.value
 
     def __str__(self):
+        """
+        Joins the string representations of this list's nodes.
+
+        :return: the string representation of this list
+        """
         return "[" + ", ".join(repr(e) for e in self) + "]"
 
-    def append(self, other):
-        self.tail.next = Node(other)
+    def append(self, value):
+        """
+        Adds a new node containing the given value to this list.
+
+        :param value: value to add to this list
+        """
+        self.tail.next = Node(value)
         self.tail = self.tail.next
         self.length += 1
 
-    def insert(self, index, other):
+    def insert(self, index, value):
+        """
+        Inserts a node containing the value at the given index shifting all nodes after that
+        one index further.
+        If the index is greater than the length, appends instead.
+
+        :param index: index to insert at
+        :param value: value to insert
+        """
         if index > len(self):
-            self.append(other)
+            self.append(value)
             return
         node = self.head
         for i in range(index):
-            if node.next is not None:
-                node = node.next
+            #  if node.next is not None:
+            #  No need to check because the bounds are already checked.
+            node = node.next
         temp = node.next
-        new_node = Node(other)
+        new_node = Node(value)
         new_node.next = temp
         node.next = new_node
         self.length += 1
 
     def remove(self, index):
+        """
+        Removes the node at the given index.
+        If the list has less nodes than the index, removes the last one.
+
+        :param index: index to remove the node at
+        :return: the removed node's value
+        """
         before = self.head
         node = self.head.next
         for i in range(index):
@@ -53,18 +90,34 @@ class List:
         return node.value
 
     def push(self, value):
+        """
+        Pushes a node containing the given value to the head of the list.
+
+        :param value: value to add
+        """
         temp = self.head.next
         self.head.next = Node(value)
         self.head.next.next = temp
         self.length += 1
 
     def pop(self):
+        """
+        Removes and returns the value of the node at the head.
+
+        :return: the value of the node at the head
+        """
         node = self.head.next
         self.head.next = self.head.next.next
         self.length -= 1
         return node.value
 
     def __getitem__(self, index):
+        """
+        Convenience method to get the value of the node at a given index using the Python array accessor.
+
+        :param index: index to get the value at
+        :return: the value of the node at index
+        """
         node = self.head.next
         for i in range(index):
             node = node.next
@@ -83,6 +136,13 @@ class List:
         return node
 
     def __setitem__(self, index, value):
+        """
+        Convenience method that allows the use of the Python array setter.
+        Appends a new node if the index is out of bounds.
+
+        :param index: index to set the value at
+        :param value: the new value of the node at index
+        """
         if index >= len(self):
             self.append(value)
         else:
@@ -90,6 +150,11 @@ class List:
 
 
 class Node:
+    """
+    Data structure that holds a value and a pointer to the next instance of this class.
+    That pointer is `None` in the event that there is no next instance.
+    """
+
     def __init__(self, value):
         self.value = value
         self.next = None
@@ -107,4 +172,15 @@ if __name__ == '__main__':
     liste.push("Vorne")
     print(liste)
     print(liste.pop())
+    print(liste)
+
+    liste = List()
+
+    liste.append("1")
+    liste.append("2")
+    liste.append("3")
+
+    liste.insert(1, "Nach 1")
+    liste.remove(10)
+
     print(liste)

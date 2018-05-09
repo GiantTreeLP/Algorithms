@@ -7,6 +7,11 @@ class Stack(array):
     """
 
     def push(self, value):
+        """
+        Push value to the top of the stack.
+
+        :param value: value to push to the stack
+        """
         self.append(value)
 
 
