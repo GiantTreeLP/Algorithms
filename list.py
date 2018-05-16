@@ -140,7 +140,7 @@ class List:
             node = node.next
         return node.value
 
-    def get_node(self, index: int) -> Node:
+    def __get_node(self, index: int) -> Node:
         """
         Traverses the list and returns the node at the given index.
 
@@ -163,7 +163,7 @@ class List:
         if index >= len(self):
             self.append(value)
         else:
-            self.get_node(index).value = value
+            self.__get_node(index).value = value
 
 
 if __name__ == '__main__':
