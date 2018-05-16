@@ -1,7 +1,9 @@
+from typing import List
+
 import math
 
 
-def sieve(n):
+def sieve(n: int) -> List[int]:
     """
     Determines the prime numbers between 0 and n using the sieve of eratosthenes with a size of n.
 

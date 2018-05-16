@@ -3,7 +3,7 @@ class Queue(list):
     Lazy queue implementation
     """
 
-    def put(self, value):
+    def put(self, value: object) -> None:
         """
         Puts a value at the end of the queue.
 
@@ -11,7 +11,7 @@ class Queue(list):
         """
         self.append(value)
 
-    def get(self):
+    def get(self) -> object:
         """
         Gets the next value of the queue.
 

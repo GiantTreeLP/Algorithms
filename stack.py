@@ -6,7 +6,7 @@ class Stack(array):
     Stack based on an array
     """
 
-    def push(self, value):
+    def push(self, value: object):
         """
         Push value to the top of the stack.
 
