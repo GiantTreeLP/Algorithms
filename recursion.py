@@ -3,6 +3,14 @@ def fact(n: int) -> int:
     Recursive faculty calculation.
     Fails at small numbers, due to the low recursion depth
 
+    Computational complexity:
+
+        A_n = A_n-1 + 1
+
+        A_n = O(A_n)
+
+        A_n = O(n)
+
     :param n: a number, small enough to not crash Python
     :return: the faculty of n
     """
@@ -14,6 +22,14 @@ def fact(n: int) -> int:
 def iter_fact(n: int) -> int:
     """
     Iterative calculation of the faculty of n
+
+    Computational complexity:
+
+        A_n = A_n-1 + 1
+
+        A_n = n * 1
+
+        A_n = O(n)
 
     :param n: parameter for `n!`
     :return: the faculty (`n!`) of n
@@ -30,6 +46,14 @@ def fib(n: int) -> int:
     """
     Recursive approach to calculate the n-th fibonacci number.
     Very slow at relatively small numbers.
+
+    Computational complexity:
+
+        A_n = A_n-1 + A_n-2
+
+        A_n = O(2 * A_n-1)
+
+        A_n = O(2^n)
 
     :param n: the index for the fibonacci sequence
     :return: the n-th fibonacci number

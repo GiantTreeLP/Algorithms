@@ -1,10 +1,21 @@
-import os
 import colorama
 
 
 def hanoi(height: int, source_index: int, destination_index: int, external_index: int) -> None:
     """
     Recursive solution to solve the towers of hanoi problem.
+
+    Computational complexity:
+
+        A_n = A_n-1 + A_n-1 + 1
+
+        A_n = 2 * A_n-1 + 1
+
+        A_n = 2 * (2 * A_n-2 + 1) + 1
+
+        A_n = 2 * 2 * A_n-2 + 2
+
+        A_n = O(2^n)
 
     :param height: the height of the tower to solve
     :param source_index: the index of the source sublist in `towers`
