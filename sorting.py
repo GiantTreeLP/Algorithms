@@ -52,7 +52,18 @@ def merge_sort(x):
     return result
 
 
+def quick_sort(x):
+    if len(x) < 2:
+        return x
+    else:
+        pivot = x[0]
+        less = [i for i in x[1:] if i <= pivot]
+        greater = [i for i in x[1:] if i > pivot]
+        return quick_sort(less) + [pivot] + quick_sort(greater)
+
+
 if __name__ == '__main__':
     print(selection_sort([2, 4, 6, 4, 2, 7, 3, 1, 8, 6, 8, 4]))
     print(insertion_sort([2, 4, 6, 4, 2, 7, 3, 1, 8, 6, 8, 4]))
     print(merge_sort([2, 4, 6, 4, 2, 7, 3, 1, 8, 6, 8, 4]))
+    print(quick_sort([2, 4, 6, 4, 2, 7, 3, 1, 8, 6, 8, 4]))
