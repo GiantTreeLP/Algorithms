@@ -38,7 +38,8 @@ def insertion_sort(sequence):
 def merge_sort(x):
     if len(x) < 2:
         return x
-    result, mid = [], len(x) // 2
+    result = []
+    mid = len(x) // 2
     y = merge_sort(x[:mid])
     z = merge_sort(x[mid:])
     while (len(y) > 0) and (len(z) > 0):
