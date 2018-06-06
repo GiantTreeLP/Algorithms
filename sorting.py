@@ -1,4 +1,4 @@
-from heapq import heappush, heappop
+from heapq import heappush, nsmallest
 
 
 def selection_sort(sequence):
@@ -69,10 +69,7 @@ def heap_sort(sequence):
     heap = []
     for v in sequence:
         heappush(heap, v)
-    result = []
-    while heap:
-        result.append(heappop(heap))
-    return result
+    return nsmallest(len(heap), heap)
 
 
 if __name__ == '__main__':
