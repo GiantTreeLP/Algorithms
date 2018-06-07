@@ -15,12 +15,23 @@ def frequency(input_bytes) -> Dict[object, int]:
 
 def initheap(frequencies) -> List[object]:
     heap = [(f, [(s, (0, 0))]) for s, f in frequencies.items()]
-    heap.append((1, [(0, (0, 0))]))
     heapify(heap)
     return heap
 
 
-def encode(input_bytes):
+def encode(input_bytes, table):
+    result: str = ""
+    for s in input_bytes:
+        b, v = table[s]
+        result += format_binary(b, v)
+    return result
+
+
+def format_binary(b, v):
+    return bin(v)[2:].rjust(b, '0')
+
+
+def encoding_table(input_bytes):
     frequencies = frequency(input_bytes)
     heap = initheap(frequencies)
     while len(heap) > 1:
@@ -30,21 +41,34 @@ def encode(input_bytes):
                   [(s, (n + 1, v)) for (s, (n, v)) in a[1]]
                   + [(s, (n + 1, (1 << n) + v)) for (s, (n, v)) in b[1]])
         heappush(heap, merged)
-    table = dict(heappop(heap)[1])
-    # print(table)
-    # print("bits    code          value    symbol")
-    # for s, (b, v) in table.items():
-    #     print("{b:4d}\t{c:14s}\t{v:5d}\t{s!r}".format(
-    #         b=b, v=v, s=s, c=bin(v)[2:].rjust(b, '0')
-    #     ))
-    for s in input_bytes:
-        b, v = table[s]
-        yield "{b:0b}".format(b=v)
+    return dict(heappop(heap)[1])
 
 
 def test_encode() -> None:
     input_bytes = Path("../resources/loremipsum.txt").read_text()
-    print("".join(encode(input_bytes)))
+    table = encoding_table(input_bytes)
+    encoded = encode(input_bytes, table)
+    print(encoded)
+    decoded = decode(encoded, table)
+    print(decoded)
+
+
+def decode(encoded, table):
+    decoding_table = dict()
+    for s, (b, v) in table.items():
+        decoding_table[format_binary(b, v)] = (s, b)
+    i: int = 0
+    code_len: int = 1
+    while i < len(encoded):
+        code = encoded[i:i + code_len]
+        if code in decoding_table:
+            decoded = decoding_table[code]
+            encoded = encoded[0:i] + decoded[0] + encoded[i + code_len:]
+            i += 1
+            code_len = 1
+        else:
+            code_len += 1
+    return encoded
 
 
 if __name__ == '__main__':
