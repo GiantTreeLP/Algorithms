@@ -43,7 +43,7 @@ def encode(input_bytes):
 
 
 def test_encode() -> None:
-    input_bytes = Path("resources/loremipsum.txt").read_text()
+    input_bytes = Path("../resources/loremipsum.txt").read_text()
     print("".join(encode(input_bytes)))
 
 

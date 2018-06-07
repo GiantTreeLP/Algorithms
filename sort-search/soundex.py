@@ -35,7 +35,7 @@ def soundex(s: str) -> str:
 if __name__ == '__main__':
     print(soundex("Meier"))
     print(soundex("Meyer"))
-    for name in open("resources/nachnamen.txt"):
+    for name in open("../resources/nachnamen.txt"):
         name = name.strip()
         if soundex("Meier") == soundex(name):
             print(name, soundex(name))
