@@ -5,9 +5,10 @@ from pathlib import Path
 from typing import Dict, List, Tuple, Iterable
 
 
-def frequency(input_bytes: Iterable) -> Dict[object, int]:
+def frequency(input_bytes: Iterable) -> Dict[chr, int]:
     result = {}
     for c in input_bytes:
+        c = chr(c)
         if c in result:
             result[c] += 1
         else:
@@ -15,16 +16,16 @@ def frequency(input_bytes: Iterable) -> Dict[object, int]:
     return result
 
 
-def initheap(frequencies: Dict[chr, int]) -> List[Tuple[int, List[Tuple[chr, Tuple[int, int]]]]]:
+def init_heap(frequencies: Dict[chr, int]) -> List[Tuple[int, List[Tuple[chr, Tuple[int, int]]]]]:
     heap = [(f, [(s, (0, 0))]) for s, f in frequencies.items()]
     heapify(heap)
     return heap
 
 
-def encode(input_bytes: Iterable[int], table: Dict[int, Tuple[int, int]]) -> str:
+def encode(input_bytes: Iterable[int], table: Dict[chr, Tuple[int, int]]) -> str:
     result: str = ""
     for s in input_bytes:
-        b, v = table[s]
+        b, v = table[chr(s)]
         result += format_binary(b, v)
     return result
 
@@ -35,7 +36,7 @@ def format_binary(b: int, v: int) -> str:
 
 def encoding_table(input_bytes: Iterable[int]) -> Dict[int, Tuple[int, int]]:
     frequencies = frequency(input_bytes)
-    heap = initheap(frequencies)
+    heap = init_heap(frequencies)
     while len(heap) > 1:
         a = heappop(heap)
         b = heappop(heap)
@@ -73,7 +74,7 @@ def compress_to_file(file_name: str, input_bytes: Iterable[int]) -> None:
     write_to_file(file_name, compressed, table, padding)
 
 
-def read_from_file(file_name: str) -> Iterable[int]:
+def read_from_file(file_name: str) -> bytes:
     binary = Path(file_name).read_bytes()
     null_index = binary.find(0)
     obj = json.loads(binary[0:null_index], encoding='UTF-8')
@@ -82,33 +83,31 @@ def read_from_file(file_name: str) -> Iterable[int]:
     return decode(decompressed, obj['t'])
 
 
-def test_encode() -> None:
-    input_bytes = Path("../resources/loremipsum.txt").read_text()
-    compress_to_file("compressed.huff", input_bytes)
-
-    # iterable = read_from_file("compressed.huff")
-    print("Size original:", len(input_bytes))
-    print("Size compressed:", os.stat("compressed.huff").st_size)
-    print("Net savings: {:%}".format(1 - os.stat("compressed.huff").st_size / len(input_bytes)))
-
-
-def decode(encoded: str, table: Dict[chr, Tuple[int, int]]) -> Iterable:
+def decode(encoded: str, table: Dict[chr, Tuple[int, int]]) -> bytes:
     decoding_table = dict()
     for s, (b, v) in table.items():
         decoding_table[format_binary(b, v)] = (s, b)
     i: int = 0
     code_len: int = 1
+    result = b""
     while i < len(encoded):
         code = encoded[i:i + code_len]
         if code in decoding_table:
             decoded = decoding_table[code]
-            encoded = encoded[0:i] + decoded[0] + encoded[i + code_len:]
-            i += 1
+            result += bytes([ord(decoded[0])])
+            # encoded = encoded[0:i] + decoded[0] + encoded[i + code_len:]
+            i += code_len
             code_len = 1
         else:
             code_len += 1
-    return encoded
+    return result
 
 
 if __name__ == '__main__':
-    test_encode()
+    text = Path('../resources/loremipsum.txt').read_bytes()
+    compress_to_file("compressed.huff", text)
+
+    iterable = read_from_file("compressed.huff")
+    print("Size original:", len(text))
+    print("Size compressed:", os.stat("compressed.huff").st_size)
+    print("Net savings: {:%}".format(1 - os.stat("compressed.huff").st_size / len(text)))
