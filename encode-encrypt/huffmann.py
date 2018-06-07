@@ -1,3 +1,4 @@
+import argparse
 import json
 import os
 from heapq import heapify, heappop, heappush
@@ -79,35 +80,40 @@ def read_from_file(file_name: str) -> bytes:
     null_index = binary.find(0)
     obj = json.loads(binary[0:null_index], encoding='UTF-8')
     compressed = binary[null_index + 1:]
-    decompressed = decompress(compressed)[0:len(compressed) * 8 - obj['p']]
-    return decode(decompressed, obj['t'])
+    return decode(decompress(compressed)[0:len(compressed) * 8 - obj['p']], obj['t'])
 
 
 def decode(encoded: str, table: Dict[chr, Tuple[int, int]]) -> bytes:
-    decoding_table = dict()
+    decoding_table: Dict[str, Tuple[chr, int]] = dict()
     for s, (b, v) in table.items():
         decoding_table[format_binary(b, v)] = (s, b)
-    i: int = 0
-    code_len: int = 1
-    result = b""
-    while i < len(encoded):
-        code = encoded[i:i + code_len]
+    result = []
+    code = ""
+    for b in encoded:
+        code += b
         if code in decoding_table:
-            decoded = decoding_table[code]
-            result += bytes([ord(decoded[0])])
-            # encoded = encoded[0:i] + decoded[0] + encoded[i + code_len:]
-            i += code_len
-            code_len = 1
-        else:
-            code_len += 1
-    return result
+            result.append(ord(decoding_table[code][0]))
+            code = ""
+    return bytes(result)
+
+
+def main(file_name: str = '../resources/loremipsum.txt'):
+    text = Path(file_name).read_bytes()
+    # text = Path('../LICENSE').read_bytes()
+    compress_to_file("compressed.huff", text)
+    decompressed = read_from_file("compressed.huff")
+    if text != decompressed:
+        print("Error text != decompressed")
+    print("Size original:", len(text), "bytes")
+    print("Size compressed:", os.stat("compressed.huff").st_size, "bytes")
+    print("Net savings: {:%}".format(1 - os.stat("compressed.huff").st_size / len(text)))
 
 
 if __name__ == '__main__':
-    text = Path('../resources/loremipsum.txt').read_bytes()
-    compress_to_file("compressed.huff", text)
-
-    iterable = read_from_file("compressed.huff")
-    print("Size original:", len(text))
-    print("Size compressed:", os.stat("compressed.huff").st_size)
-    print("Net savings: {:%}".format(1 - os.stat("compressed.huff").st_size / len(text)))
+    parser = argparse.ArgumentParser(description="Compresses files using huffmann encoding")
+    parser.add_argument('file', default=None, type=str, help="the file to compress", nargs='?')
+    args = parser.parse_args()
+    if args.file is not None:
+        main(args.file)
+    else:
+        main()
