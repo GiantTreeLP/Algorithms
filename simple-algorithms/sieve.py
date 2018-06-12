@@ -16,12 +16,7 @@ def sieve(n: int) -> List[int]:
         if b[i]:
             for j in range(i * i, n, i):
                 b[j] = False
-    nums = []
-    k = 0
-    for i in range(1, n):
-        k += 1
-        if b[i]:
-            nums.append(i)
+    nums = [i for i in range(1, n) if b[i]]
     return nums
 
 
