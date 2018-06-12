@@ -1,4 +1,4 @@
-from heapq import heappop, heappush, nsmallest
+from heapq import heappop, heappush
 
 
 def selection_sort(sequence):

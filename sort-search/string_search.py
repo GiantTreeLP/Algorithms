@@ -68,7 +68,7 @@ def rabin_karp_search(needle: str, haystack: str) -> int:
     b = 256
     q = 8388593
     m = len(needle)
-    B = b ** (m - 1)
+    B = b ** (m - 1) % q
     hp = ha = 0
     haystack += needle
     for i in range(m):
